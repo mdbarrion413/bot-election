@@ -50,7 +50,7 @@ def main():
         st.header('BOT Execom Election')
         tophead = st.beta_container()
         chairman = st.beta_container()
-        vicechairman = st.beta_container()
+        vice_chairman = st.beta_container()
         secretary = st.beta_container()
         member1 = st.beta_container()
         member2 = st.beta_container()
@@ -73,70 +73,107 @@ def main():
             df_new = df.copy()
 
         with chairman:
-            df_pres = df_new['FullName'] # + ' ' + df_vp['First Name']
-            pres = st.selectbox('Select New PBS President and Chairman:', df_pres)
-            ccn = df_new['Council'].iloc[0]
+            pres = df_new['FullName']
+            pres = st.selectbox('Select New PBS President and Chairman:', pres)
+            #ccn = df_new['Council'] #.iloc[0]
+            
+            council = df_new.query('FullName == @pres')
+            chairman_council = council['Council'].iloc[0]
+            #st.write(council)
+            #st.write(chairman_council)
+
+            #st.write(ccn)
             chair_title = "President & Chairman"
 
-        with vicechairman:
+        with vice_chairman:
             ### Search for the selected Chairman name in previous selectbox ###
-            name = df_new.loc[df_new['FullName'] == pres]
+            pres_name = df_new.loc[df_new['FullName'] == pres]
+            #st.write(name)
 
-            ### Select valuse fo Name and Council ###
-            cn = name['Council'].iloc[0]
-            nm = name['FullName'].iloc[0]
+            ### Select values for Chairman and Council ###
+            chr_council = pres_name['Council'].iloc[0]
+            chr_name = pres_name['FullName'].iloc[0]
+            #st.write(chr_council)
+            #st.write(chr_name)
 
             ### Search and remove Name and Council from dataset and create new one ###
-            df_vc = df_new.query('FullName != @nm and Council != @cn')
-            dfsh = df_vc.shape[0]
-            df_vc = df_vc.reset_index(drop=True)
+            vice_chair = df_new.query('FullName != @chr_name and Council != @chr_council')
+            #dfsh = vice_chair.shape[0]
+            #st.write(dfsh)
+            vice_chair = vice_chair.reset_index(drop=True)
+            #st.write(vice_chair)
 
-            df_vpres = df_vc['FullName'] # + ' ' + df_vp['First Name']
-            vpres = st.selectbox('Select New Vice-President and Vice-Chairman:', df_vpres)
+            vice_chair_name = vice_chair['FullName']
+            vpres = st.selectbox('Select New Vice-President and Vice-Chairman:', vice_chair_name)
             vchair_title = "Vice-President & Vice-Chairman"
 
         with secretary:
             ### Selected Vice-Chairman ###
-            name_vc = df_vc.loc[df_vc['FullName']==vpres]
+            vice_chair = df_new.loc[df_new['FullName'] == vpres]
 
-            vcn = name_vc['FullName'].iloc[0]
-            vccn = name_vc['Council'].iloc[0]
+            vice_chair_name = vice_chair['FullName'].iloc[0]
+            vice_chair_council = vice_chair['Council'].iloc[0]
+            # st.write(vice_chair_name, vice_chair_council)
 
-            #st.write(vcn, vccn)
-            df_sec = df_vc.query('FullName != @vcn and Council != @vccn')
-            #df_sec
-            df_sec = df_sec.reset_index(drop=True)
+            ### Select Secretary ###
+            secretary = df_new.query('FullName != @vice_chair_name and Council != @vice_chair_council and FullName !=@pres and Council != @chairman_council')
+            #st.write(sec)
+            secretary = secretary.reset_index(drop=True)
+            #st.write(sec)
 
-            df_nsec = df_sec['FullName']# + ' ' + df_vp['First Name']
-            scn = df_sec['Council'].iloc[0]
-            sec = st.selectbox('Select New Corporate Secretary:', df_nsec)
+            secretary_name = secretary['FullName']
+            secretary_council = secretary['Council']
+
+            sec = st.selectbox('Select New Corporate Secretary:', secretary_name)
             sec_title = "Corporate Secretary"
+            #st.write(secretary_name, secretary_council)
 
         with member1:
             ### Selected Vice-Chairman ###
-            name_sec = df_sec.loc[df_sec['FullName']==sec]
+            sec_name = df_new.loc[df_new['FullName'] == sec]
 
-            scfn = name_sec['FullName'].iloc[0]
-            sccn = name_sec['Council'].iloc[0]
+            sc_name = sec_name['FullName'].iloc[0]
+            sc_council = sec_name['Council'].iloc[0]
+            #st.write(sc_name, sc_council)
 
-            #st.write(vcn, vccn)
-            df_mem1 = df_sec.query('FullName != @scfn and Council != @sccn')
-            #df_sec
-            df_mem1 = df_mem1.reset_index(drop=True)
+            # #st.write(vcn, vccn)
+            df_member1 = df_new.query('FullName != @vice_chair_name and Council != @vice_chair_council '\
+            + 'and FullName !=@pres and Council != @chairman_council and FullName != @sc_name and Council != @sc_council')
+            # #df_mem1
+            df_member1 = df_member1.reset_index(drop=True)
 
-            mem1nm = df_mem1['FullName'] # + ' ' + df_vp['First Name']
-            mem1cn = df_mem1['Council'].iloc[0]
-            mem1 = st.selectbox('Select 1 New Member:', df_mem1)
-            mem1_title = "Member"
+            member1_name = df_member1['FullName']
+            # mem1cn = df_mem1['Council'].iloc[0]
+            member1 = st.selectbox('Select New Member:', member1_name) # df_mem1)
+            member1_title = "Member"
 
         with member2:
-            mem2_title = "Member"
-            df_mem2 = df_new.query('FullName != @pres and FullName != @vpres and FullName != @sec and FullName != @mem1')
-            df_mem2 = df_mem2.reset_index(drop=True)
-            mem2nm = df_mem2['FullName'] # + ' ' + df_vp['First Name']
-            mem2cn = df_mem2['Council'].iloc[0]
-            mem2 = st.selectbox('Select 1 New Member:', df_mem2)
+            df_member2 = df.copy()
 
+            member1_name = df_member2.loc[df_member2['FullName'] == member1]
+            #st.write(member1_name)
+            mem1_name = member1_name['FullName'].iloc[0]
+            mem1_council = member1_name['Council'].iloc[0]
+            #st.write(mem1_name, mem1_council)
+
+            # #st.write(vcn, vccn)
+            df_member2 = df_new.query('FullName != @vice_chair_name '\
+            + 'and FullName != @pres and FullName != @sc_name '\
+            + 'and FullName != @mem1_name ')
+            #df_member1
+            #df_member1
+            df_member2 = df_member2.reset_index(drop=True)
+
+            member2_name = df_member2['FullName']
+            # # mem1cn = df_mem1['Council'].iloc[0]
+            member2 = st.selectbox('Select New Member:', member2_name) # df_mem1)
+            member2_title = "Member"
+
+            member2_name = df_member2.loc[df_member2['FullName'] == member2]
+            mem2_name = member2_name['FullName'].iloc[0]
+            mem2_council = member2_name['Council'].iloc[0]
+            #st.write(member2_council)
+        
         with results:
             res = st.beta_expander("SUMMARY & VOTE SUBMISSION")
 
@@ -152,29 +189,32 @@ def main():
                     col1.write("**Corporate Secretary**")
                     col1.write("**Execom Member1**")
                     col1.write("**Execom Member2**")
+                    #col1.text_input('Enter your number:','Number')
                     
                 with col2:
-                    col2.write(pres + ", " + cn)
-                    col2.write(vpres + ", " + vccn)
-                    col2.write(sec + ", " + scn)
-                    col2.write(mem1 + ", " + mem1cn)
-                    col2.write(mem2 + ", " + mem2cn)
-                    col2.write(' \n ')
+                    col2.write(chr_name + ", " + chr_council)
+                    col2.write(vice_chair_name + ", " + vice_chair_council)
+                    col2.write(sc_name + ", " + sc_council)
+                    col2.write(mem1_name + ", " + mem1_council)
+                    col2.write(mem2_name + ", " + mem2_council)
+                    #col2.write(' \n ')
+
                     if res.button("SUBMIT VOTE"):
                         create_table()
                         for x in range(0, 5):
                             if x == 0:
-                                add_vote(pres,chair_title,cn,datetime.date(datetime.now()))
+                                add_vote(chr_name,chair_title,chr_council,datetime.date(datetime.now()))
                             if x == 1:
-                                add_vote(vpres,vchair_title,vccn,datetime.date(datetime.now()))
+                                add_vote(vice_chair_name,vchair_title,vice_chair_council,datetime.date(datetime.now()))
                             if x == 2:
-                                add_vote(sec,sec_title,scn,datetime.date(datetime.now()))
+                                add_vote(sc_name,sec_title,sc_council,datetime.date(datetime.now()))
                             if x == 3:
-                                add_vote(mem1,mem1_title,mem1cn,datetime.date(datetime.now()))
+                                add_vote(mem1_name,member1_title,mem1_council,datetime.date(datetime.now()))
                             if x == 4:
-                                add_vote(mem2,mem2_title,mem2cn,datetime.date(datetime.now()))
+                                add_vote(mem2_name,member2_title,mem2_council,datetime.date(datetime.now()))
                             
                         col1.success("Thank you for your vote. Please do not click the SUBMIT VOTE button again.")
+
     else:
         st.subheader("RESULTS OF EXECOM ELECTION")
         rows = view_all_vote()
