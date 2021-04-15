@@ -74,7 +74,10 @@ def main():
     create_table()
 
     if choice == "Board Execom Election":
-        st.header('BOT Execom Election')
+        st.header(f"**BOT Execom Election**")
+        st.markdown('''
+            ---
+        ''')
         tophead = st.beta_container()
         chairman = st.beta_container()
         vice_chairman = st.beta_container()
@@ -106,11 +109,11 @@ def main():
             with col2:
                 col2.warning(f"Select nominee then click **Submit Vote** once.")
 
-            st.markdown("""
-                ---
-                \n
-                \n
-            """)
+        st.markdown("""
+            ---
+            \n
+            \n
+        """)
 
     #### VICE PRESIDENT  ####
 
@@ -167,12 +170,12 @@ def main():
                 with col2:
                     col2.warning(f"Select nominee then click **Submit Vote** once.")
 
-            st.markdown("""
-                ---
-                \n
-                \n
-            """)
-    
+        st.markdown("""
+            ---
+            \n
+            \n
+        """)
+
     #### SECRETARY  ####
         agree = st.checkbox("Proceed to Corporate Secretary")
         if agree:
@@ -229,11 +232,11 @@ def main():
                 with col2:
                     col2.warning(f"Select nominee then click **Submit Vote** once.")
 
-            st.markdown("""
-                ---
-                \n
-                \n
-            """)
+        st.markdown("""
+            ---
+            \n
+            \n
+        """)
 
     #### MEMBER 1
         agree = st.checkbox("Proceed to Member 1")
@@ -295,7 +298,7 @@ def main():
                     col2.warning(f"Select nominee then click **Submit Vote** once.")
             
         st.markdown("""
-            \n
+            ---
             \n
             \n
         """)
@@ -370,7 +373,7 @@ def main():
                     col2.warning(f"Select nominee then click **Submit Vote** once.")
             
         st.markdown("""
-            \n
+            ---
             \n
             \n
         """)
